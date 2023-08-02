@@ -58,6 +58,34 @@
     <audio data-key="74" src="sounds/snare.wav"></audio>
     <audio data-key="75" src="sounds/tom.wav"></audio>
     <audio data-key="76" src="sounds/tink.wav"></audio>
+
+    <script>
+        // play sound corresponding to key code and handle it's transformation
+        function playSound(e) {
+            const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+            // get key with data-key
+            const key = document.querySelector(`.key[data-key="${e.keyCode}"]`)
+
+            if (!audio) return; // stop the function from running if audio is null
+            audio.currentTime = 0; // rewind to the start 
+            audio.play();
+
+            key.classList.add('playing');
+        }
+
+        // remove transition from element
+        function removeTransition(e) {
+            if (e.propertyName !== 'transform') return; // skip if not a transition
+            this.classList.remove('playing');
+        }
+
+        // get all keys in the document and add event listener to each
+        const keys = document.querySelectorAll('.key');
+        keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
+        // add event listener for the whole window to get key pressed down
+        window.addEventListener('keydown', playSound);
+    </script>
 </body>
 
 </html>
